@@ -1,0 +1,51 @@
+<head>
+  <title>canceled-list</title>
+</head>
+
+<body>
+  <div class="tabbable"> <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab1" data-toggle="tab">Absences</a></li>
+      <li><a href="#tab2" data-toggle="tab">Admin</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab1">
+        <header>
+          <h1>Absences List</h1>
+          {{> addTeacher}}
+        </header>
+
+        <ul>
+          {{#each teachers}}
+          {{> teacher}}
+          {{/each}}
+        </ul>
+      </div>
+      <div class="tab-pane" id="tab2">
+        {{> adminCheck}}
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+
+<template name = "teacher">
+  <li class="">
+    {{name}} <button class = "delete {{#if notAdmin}}hidden{{/if}}">&times;</button>
+  </li>
+</template>
+
+<template name = "addTeacher">
+  <form class="new-teacher {{#if notAdmin}}hidden{{/if}}">
+    <input class = "input-xlarge" type="text" name = "text" placeholder="teacher's name and comments here...">
+  </form>
+</template>
+
+<template name = "adminCheck">
+  <form class="admin-password">
+    <input class = "input-xlarge" type="password" name = "password" placeholder="admin - password">
+  </form>
+  <p class = "{{#if notAdmin}}hidden{{/if}}">You're in!</p>
+</template>
