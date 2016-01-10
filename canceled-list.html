@@ -1,51 +1,90 @@
 <head>
   <title>canceled-list</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-  <div class="tabbable"> <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab1" data-toggle="tab">Absences</a></li>
-      <li><a href="#tab2" data-toggle="tab">Admin</a></li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" id="tab1">
-        <header>
-          <h1>Absences List</h1>
-          {{> addTeacher}}
-        </header>
+  <div class="container-fluid">
+    <div>
 
-        <ul>
-          {{#each teachers}}
-          {{> teacher}}
-          {{/each}}
-        </ul>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#absences" aria-controls="absences" role="tab" data-toggle="tab">Absences</a></li>
+        <li role="presentation"><a href="#admin" aria-controls="admin" role="tab" data-toggle="tab">Admin</a></li>
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="absences">
+          <header>
+            <h1>Absences List</h1>
+            {{> addTeacher}}
+          </header>
+
+          <ul>
+            {{#each teachers}}
+            {{> teacher}}
+            {{/each}}
+          </ul>
+          {{> askToJoin}}
+
+        </div>
+        <div role="tabpanel" class="tab-pane" id="admin">
+          {{> adminCheck}}
+          <ul class = "{{#if notAdmin}}hidden{{/if}}">
+
+          </ul>
+        </div>
       </div>
-      <div class="tab-pane" id="tab2">
-        {{> adminCheck}}
-      </div>
+
     </div>
+
   </div>
-
-
-
 </body>
 
 <template name = "teacher">
   <li class="">
-    {{name}} <button class = "delete {{#if notAdmin}}hidden{{/if}}">&times;</button>
+    {{name}} <button class = "btn btn-danger delete {{#if notAdmin}}hidden{{/if}}">
+      <span class = "glyphicon glyphicon-remove"></span>
+    </button>
   </li>
 </template>
 
 <template name = "addTeacher">
   <form class="new-teacher {{#if notAdmin}}hidden{{/if}}">
-    <input class = "input-xlarge" type="text" name = "text" placeholder="teacher's name and comments here...">
+    <input class = "form-control" type="text" name = "text" placeholder="teacher's name and comments here...">
   </form>
 </template>
 
 <template name = "adminCheck">
+  <h1>Admins only</h1>
   <form class="admin-password">
-    <input class = "input-xlarge" type="password" name = "password" placeholder="admin - password">
+    <input type="password" class="form-control" placeholder="admin - password" name = "password">
   </form>
   <p class = "{{#if notAdmin}}hidden{{/if}}">You're in!</p>
+</template>
+
+<template name = "askToJoin">
+  <form class = "emailRequest">
+    <div class="form-group">
+      <label>
+        <p>
+          Always in the library before everyone else?
+        </p>
+        <p>
+          Want to be an admin?
+        </p>
+        <p>
+          Here's your chance!
+        </p>
+        <p>
+          Type your email address here and we will contact you soon!
+        </p>
+      </label>
+      <p></p>
+      <label for="exampleInputEmail1">Email address</label>
+      <input type="email" name = "email" class="form-control" id="inputEmail" placeholder="Email">
+    </div>
+    <button type="submit" class="submitEmail btn btn-default">Submit</button>
+  </form>
 </template>

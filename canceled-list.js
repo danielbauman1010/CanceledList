@@ -1,10 +1,19 @@
 Teachers = new Mongo.Collection('teachers');
+Requests = new Mongo.Collection('requests');
 if (Meteor.isClient) {
-  // counter starts at 0
+  Meteor.subscribe("teachers");
+  Meteor.subscribe("requests");
   Session.set("notAdmin",true);
   Template.body.helpers({
     teachers: function() {
       return Teachers.find({});
+    },
+    notAdmin: function() {
+      if(Session.get("notAdmin") == true) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
   });
@@ -68,6 +77,13 @@ if (Meteor.isClient) {
       }
     }
   });
+  Template.askToJoin.events({
+    "submit .emailRequest": function(event) {
+      event.preventDefault();
+      var email = event.target.email.value;
+      Meteor.call("addRequest", email);
+    }
+  });
 }
 Meteor.methods({
   addTeacher:   function (name) {
@@ -75,11 +91,23 @@ Meteor.methods({
   },
   deleteTeacher: function(teacherId) {
     Teachers.remove(teacherId);
+  },
+  addRequest: function(email) {
+    Requests.insert({email: email});
+  },
+  deleteRequest: function(requestId) {
+    Requests.remove(requestId);
   }
 });
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
     // code to run on server at startup
+    Meteor.publish("teachers", function() {
+      return Teachers.find();
+    });
+    Meteor.publish("requests", function() {
+      return Requests.find();
+    });
   });
 }
