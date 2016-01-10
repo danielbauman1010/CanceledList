@@ -31,9 +31,11 @@
         </div>
         <div role="tabpanel" class="tab-pane" id="admin">
           {{> adminCheck}}
-          <ul class = "{{#if notAdmin}}hidden{{/if}}">
-
-          </ul>
+          <ol class = "{{#if notAdmin}}hidden{{/if}}">
+              {{#each requests}}
+              {{> request}}
+              {{/each}}
+          </ol>
         </div>
       </div>
 
@@ -87,4 +89,11 @@
     </div>
     <button type="submit" class="submitEmail btn btn-default">Submit</button>
   </form>
+</template>
+<template name = "request">
+  <li class="">
+    {{email}} <button class = "btn btn-danger deleteRequest">
+      <span class = "glyphicon glyphicon-remove"></span>
+    </button>
+  </li>
 </template>

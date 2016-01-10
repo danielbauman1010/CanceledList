@@ -14,6 +14,11 @@ if (Meteor.isClient) {
       } else {
         return false;
       }
+    },
+    requests: function() {
+      if(Session.get("notAdmin") == false) {
+        return Requests.find({});
+      }
     }
 
   });
@@ -44,7 +49,11 @@ if (Meteor.isClient) {
       if(!Session.get("notAdmin")) {
         Meteor.call("deleteTeacher", this._id);
       }
-
+    }
+  });
+  Template.request.events({
+    "click .deleteRequest": function() {
+      Meteor.call("deleteRequest", this._id);
     }
   });
 
@@ -79,11 +88,19 @@ if (Meteor.isClient) {
   });
   Template.askToJoin.events({
     "submit .emailRequest": function(event) {
-      event.preventDefault();
-      var email = event.target.email.value;
-      Meteor.call("addRequest", email);
+      if(!(event.target.email.value == "")) {
+        event.preventDefault();
+        var email = event.target.email.value;
+        Meteor.call("addRequest", email);
+        event.target.email.value = "";
+      }
+      else {
+        alert("you haven't entered an email");
+      }
     }
   });
+
+
 }
 Meteor.methods({
   addTeacher:   function (name) {
